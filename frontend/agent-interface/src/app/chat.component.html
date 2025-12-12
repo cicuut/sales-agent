@@ -1,0 +1,66 @@
+<div class="chat-card">
+  <div class="chat-container">
+    <div #messagesContainer class="messages-viewport">
+      <div class="greeting-message">
+        <p>Halo! Ask me anything</p>
+      </div>
+
+      <div
+        *ngFor="let msg of messages"
+        class="message-row"
+        [ngClass]="{
+          'message-row--user': msg.sender === 'user',
+          'message-row--assistant': msg.sender === 'assistant'
+        }"
+      >
+        <div *ngIf="msg.sender === 'user'" class="message-bubble bubble-user">
+          {{ msg.text }}
+        </div>
+
+        <div *ngIf="msg.sender === 'assistant'" class="message-bubble bubble-assistant">
+          <span [innerHTML]="msg.sanitizedHtml || formatText(msg.text)"></span>
+
+          <div *ngIf="msg.isStreaming && !msg.text" class="loading-container-inline">
+            <div class="loading-dot" style="animation-delay: 0s"></div>
+            <div class="loading-dot" style="animation-delay: 0.2s"></div>
+            <div class="loading-dot" style="animation-delay: 0.4s"></div>
+          </div>
+
+          <span *ngIf="msg.isStreaming && msg.text" class="streaming-cursor"></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="input-area">
+      <form (submit)="sendMessage()" class="input-form">
+        <textarea
+          [(ngModel)]="userInput"
+          name="userInput"
+          rows="2"
+          class="chat-input"
+          placeholder="Your question is..."
+          (keydown.enter)="$event.preventDefault(); sendMessage()"
+          [disabled]="isLoading"
+        ></textarea>
+
+        <button type="submit" [disabled]="!userInput.trim() || isLoading" class="send-button">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="30"
+            height="30"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="m22 2-7 20-4-9-9-4Z" />
+            <path d="M22 2 11 13" />
+          </svg>
+        </button>
+      </form>
+      <p class="disclaimer-text">AI bisa membuat kesalahan. Mohon cek kembali datanya.</p>
+    </div>
+  </div>
+</div>
