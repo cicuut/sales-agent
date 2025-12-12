@@ -1,17 +1,69 @@
-# See https://docs.github.com/get-started/getting-started-with-git/ignoring-files for more about ignoring files.
+# ==========================
+# PYTHON / FLASK (Backend)
+# ==========================
+# Virtual Environments
+venv/
+env/
+ENV/
+
+# Byte-compiled / Optimized / DLL files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Flask instance folder (often contains secrets)
+instance/
+.flaskenv
+
+# Environment Variables (IMPORTANT: Never share secrets)
+.env
+.env.local
+
+# Distribution / Packaging
+build/
+develop-eggs/
+dist/
+eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Testing
+.pytest_cache/
+.coverage
+
+# ==========================
+# ANGULAR / NODE (Frontend)
+# ==========================
+# Note: Leading '/' removed so these work inside subfolders
+
+# Dependencies
+node_modules/
 
 # Compiled output
-/dist
-/tmp
-/out-tsc
-/bazel-out
+dist/
+tmp/
+out-tsc/
+bazel-out/
 
-# Node
-/node_modules
+# Angular specific
+.angular/
+
+# Logs
 npm-debug.log
 yarn-error.log
+testem.log
+/libpeerconnection.log
 
-# IDEs and editors
+# ==========================
+# IDEs & EDITORS
+# ==========================
 .idea/
 .project
 .classpath
@@ -26,18 +78,10 @@ yarn-error.log
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
-.history/*
+.history/
 
-# Miscellaneous
-/.angular/cache
-.sass-cache/
-/connect.lock
-/coverage
-/libpeerconnection.log
-testem.log
-/typings
-__screenshots__/
-
-# System files
+# ==========================
+# SYSTEM FILES
+# ==========================
 .DS_Store
 Thumbs.db
