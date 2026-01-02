@@ -4,7 +4,7 @@ import os
 import logging
 import re
 from langchain_ollama import OllamaLLM
-from langchain.callbacks.streaming_stdout import StreamingStdOutCallbackHandler
+from langchain_core.callbacks.streaming_stdout import StreamingStdOutCallbackHandler
 from langchain_experimental.agents.agent_toolkits import create_pandas_dataframe_agent
 
 # --- CONFIGURATION ---
@@ -73,6 +73,7 @@ def get_or_create_agent():
             allow_dangerous_code=True,
             handle_parsing_errors=specific_error_handler
         )
+
         
         return _cached_agent
 
@@ -81,25 +82,41 @@ def get_or_create_agent():
         return None
 
 def run_agent_logic(user_input):
+    agent = get_or_create_agent()
+    if agent is None:
+        return "Database is not available."
+
+    prompt = f"""
+    You are a sales Q&A assistant.
+
+    Rules:
+    - Use the sales data only
+    - Answer with ONE clear sentence
+    - DO NOT explain steps
+    - DO NOT mention dataframes, tables, or code
+
+    Question:
+    {user_input}
+"""
+
     try:
-        agent = get_or_create_agent()
-        
-        if agent is None:
-            return (f"Error: Could not load the database at {DB_PATH}. "
-                    "Please ensure 'retail_database.db' exists and has a 'sales' table.")
+        result = agent.invoke(prompt)
 
-        contextualized_input = (
-            "Answer this concisely using the DataFrame 'df': " + user_input + 
-            " Start with 'Final Answer:' immediately."
-        )
+        # ✅ NORMAL SUCCESS
+        if isinstance(result, dict) and "output" in result:
+            return result["output"].strip()
 
-        response = agent.invoke(contextualized_input)
-        
-        return response['output']
+        # ✅ SOMETIMES LANGCHAIN RETURNS STRING
+        if isinstance(result, str):
+            return clean_llm_output(result)
+
+        return "Sorry, I couldn't find the answer."
 
     except Exception as e:
-        print(f"Agent Execution Error: {e}")
-        return f"I ran into an error analyzing the data: {str(e)}"
+        # 🔥 LAST LINE OF DEFENSE (NO LANGCHAIN ERROR TO UI)
+        return clean_llm_output(str(e))
+
+
 
 # --- TERMINAL TESTING BLOCK ---
 if __name__ == "__main__":
@@ -114,7 +131,7 @@ if __name__ == "__main__":
         print(f"⚠️  Warning: Database file not found at {DB_PATH}")
         print("   The agent might fail, but we will try initializing now.")
 
-    get_or_create_agent()
+    get_or_create_agent() 
 
     while True:
         try:

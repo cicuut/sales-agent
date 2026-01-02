@@ -3,8 +3,7 @@ from threading import Thread
 from queue import Queue, Empty
 from flask import Flask, request, Response, stream_with_context, jsonify
 from flask_cors import CORS
-from langchain.callbacks.base import BaseCallbackHandler
-import re
+from langchain_core.callbacks import BaseCallbackHandler
 import time
 from agent import get_or_create_agent
 
