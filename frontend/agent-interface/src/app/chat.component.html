@@ -1,7 +1,7 @@
 <div class="chat-card">
   <div class="chat-container">
     <div #messagesContainer class="messages-viewport">
-      <div class="greeting-message">
+      <div class="greeting-message" *ngIf="messages.length === 0">
         <p>Halo! Ask me anything</p>
       </div>
 

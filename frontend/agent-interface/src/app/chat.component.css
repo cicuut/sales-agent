@@ -3,18 +3,18 @@
   display: block;
   height: 100%;
 }
-.chat-card{
-  display:flex;
+.chat-card {
+  display: flex;
   height: 80vh;
   justify-content: center;
 }
-.chat-container{
-display:flex ;
-flex-direction: column;
-   border: 2px solid gray;
-   width: 50vw;
-   justify-content: space-between;
-   border-radius: 10px;
+.chat-container {
+  display: flex;
+  flex-direction: column;
+  border: 2px solid gray;
+  width: 50vw;
+  justify-content: space-between;
+  border-radius: 10px;
 }
 .messages-viewport {
   flex: 1;
@@ -59,24 +59,28 @@ flex-direction: column;
 
 .bubble-assistant {
   background-color: black;
-  color:rgb(255, 255, 255);
+  color: rgb(255, 255, 255);
   border: 1px solid var(--color-gray-200);
   border-radius: 1rem;
-  white-space:normal;
+  white-space: normal;
   border-top-left-radius: 0;
 }
-.input-area{
+.input-area {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-gap: 0px;
+  gap: 0px;
 }
 
-
 @keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: .5; }
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
 }
 
 /* --- Loading Dots Animation --- */
@@ -108,7 +112,8 @@ gap: 0px;
 }
 
 @keyframes bounce {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(-25%);
     animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
   }
@@ -117,41 +122,46 @@ gap: 0px;
     animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
   }
 }
-.input-form{
+.input-form {
   width: 100%;
   display: flex;
   justify-content: center;
   gap: 30px;
   align-items: center;
-
 }
 
-.chat-input{
+.chat-input {
   width: 500px;
-  
   resize: none;
-  height:25px;
-  border-radius: 10px;
-  padding: 5px;
+  height: 25px;
+  border-radius: 5px;
+  padding: 5px 4px 5px 10px;
   border: none;
   overflow-y: scroll;
   scrollbar-width: none;
 }
 
-.chat-input::after{
+.chat-input::after {
   border: 2px solid black;
 }
 
-.send-button{
- background-color: transparent;
- border: none;
- width: 40px;
- height: 40px;
-
+.send-button {
+  background-color: transparent;
+  border: none;
+  width: 40px;
+  height: 40px;
 }
 
-.send-button:hover{
- 
-   color: rgb(15, 14, 14);
- 
+.send-button:hover {
+  color: rgb(15, 14, 14);
+}
+
+.greeting-message {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  color: gray;
+  font-size: 1.2rem;
+  height: 100%;
 }

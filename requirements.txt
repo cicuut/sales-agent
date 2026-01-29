@@ -1,0 +1,6 @@
+flask
+flask-cors
+pandas
+langchain
+langchain-ollama
+langchain-experimental

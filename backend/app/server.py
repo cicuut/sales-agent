@@ -3,8 +3,7 @@ from threading import Thread
 from queue import Queue, Empty
 from flask import Flask, request, Response, stream_with_context, jsonify
 from flask_cors import CORS
-from langchain.callbacks.base import BaseCallbackHandler
-import re
+from langchain_core.callbacks import BaseCallbackHandler
 import time
 from agent import get_or_create_agent
 
@@ -21,20 +20,17 @@ class StreamingQueueCallbackHandler(BaseCallbackHandler):
         self.queue = queue
 
     def on_llm_new_token(self, token: str, **kwargs) -> None:
-        # Don't stream tokens - they include agent reasoning
         pass
 
     def on_agent_finish(self, finish, *args, **kwargs) -> None:
-        # <CHANGE> Extract and stream the final answer character by character
         if finish and hasattr(finish, 'return_values'):
             output = finish.return_values.get('output', '')
             
-            # Stream the answer character by character for smooth display
             for char in output:
                 self.queue.put(char)
-                time.sleep(0.005)  # Smooth typing effect
+                time.sleep(0.005) 
                 
-        self.queue.put(None)  # Signal completion
+        self.queue.put(None)  
 
     def on_llm_error(self, error: Exception, **kwargs) -> None:
         error_msg = f"Error: {str(error)}"
@@ -43,7 +39,7 @@ class StreamingQueueCallbackHandler(BaseCallbackHandler):
             time.sleep(0.005)
         self.queue.put(None)
 
-# --- ROUTES ---
+
 @app.route('/predict', methods=['POST'])
 def predict():
     data = request.json
@@ -83,7 +79,7 @@ def predict():
                 greeting_msg = "Hello, I'm your assistant to help you know a little bit more about your sales. Ask me anything related to your sales. 👋"
                 for char in greeting_msg:
                     output_queue.put(char)
-                    time.sleep(0.005) # Small delay for streaming effect
+                    time.sleep(0.005) 
                 output_queue.put(None)
                 return
             
@@ -94,7 +90,7 @@ def predict():
             )
 
         except Exception as e:
-            logger.error(f"❗ Agent task error: {e}")
+            logger.error(f"Agent task error: {e}")
             output_queue.put(f"I encountered an error: {str(e)}")
         finally:
             output_queue.put(None)
@@ -116,6 +112,6 @@ def predict():
     )
 
 if __name__ == '__main__':
-    print("🚀 Starting Flask Server...")
+    print("Starting Flask Server...")
     get_or_create_agent()
     app.run(debug=True, port=5000)
